@@ -171,4 +171,4 @@ async def chat_stream(
 
     logger.info(f"Chat stream complete for conversation {conversation.id}")
 
-    yield f"\n[CONVERSATION ID: {conversation.id}, MESSAGE ID: {assistant_message.id}]"
+    # yield f"\n[CONVERSATION ID: {conversation.id}, MESSAGE ID: {assistant_message.id}]"

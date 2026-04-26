@@ -97,6 +97,11 @@ async def stream_message(
     db: AsyncSession = Depends(get_db),
     current_user=Depends(get_authenticated_user)
 ):
+    # Pre-create or fetch conversation before streaming
+    conversation = await get_or_create_conversation(
+        db, current_user, request.conversation_id
+    )
+
     async def generate():
         async for token in chat_stream(
             db=db,
@@ -108,5 +113,6 @@ async def stream_message(
 
     return StreamingResponse(
         generate(),
-        media_type="text/event-stream"
+        media_type="text/event-stream",
+        headers={"X-Conversation-Id": conversation.id}  # send ID in header
     )
