@@ -1,0 +1,14 @@
+mindchat.db
+.env
+*.env
+__pycache__/
+*.log
+*.pyc
+.DS_Store
+backend/model/checkpoints/
+backend/app/model/checkpoints/
+venv/
+model/checkpoints/
+*.db
+*.gguf
+.vscode/
