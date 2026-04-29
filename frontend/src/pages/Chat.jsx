@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getConversations, getMessages } from '../services/api'
 import { streamMessage } from '../services/api'
+import ReactMarkdown from 'react-markdown'
 
 function Chat() {
   const [conversations, setConversations] = useState([])
@@ -17,7 +18,11 @@ function Chat() {
 
   // Auto scroll to bottom when messages update
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    messagesEndRef.current?.scrollIntoView(
+      {
+        behavior: 'smooth' 
+      }
+    )
   }, [messages, streamingText])
 
   // Load conversations on mount
@@ -181,7 +186,12 @@ function Chat() {
             Logout
           </button>
         </div>
+        <div className="flex justify-center p-2 items-center">
+          <p className="text-xs text-gray-400 mt-1 ">PrateekSaha | MindChat.v1©2026</p>
+            <div className=""></div>
       </div>
+      </div>
+      
 
       {/* ── Main chat area ── */}
       <div className="flex-1 flex flex-col">
@@ -212,21 +222,107 @@ function Chat() {
                   ? 'bg-blue-600 text-white rounded-br-sm'
                   : 'bg-gray-800 text-gray-100 rounded-bl-sm'
               }`}>
-                {msg.content}
+                {msg.role === 'user' ? (
+        msg.content
+      ) : (
+        <ReactMarkdown
+          components={{
+            // Code blocks — dark background, monospace font
+            code({ node, className, children, ...props }) {
+  const isInline = !className
+  return isInline ? (
+    <code
+      className="bg-gray-700 text-blue-300 px-1 py-0.5 rounded text-xs font-mono"
+      {...props}
+    >
+      {children}
+    </code>
+  ) : (
+    <pre className="bg-gray-900 rounded-lg p-3 overflow-x-auto my-2">
+      <code className="text-green-400 text-xs font-mono" {...props}>
+        {children}
+      </code>
+    </pre>
+  )
+},
+            // Bold text
+            strong({ children }) {
+              return <strong className="text-white font-semibold">{children}</strong>
+            },
+            // Bullet points
+            ul({ children }) {
+              return <ul className="list-disc list-inside space-y-1 my-2">{children}</ul>
+            },
+            // Numbered lists
+            ol({ children }) {
+              return <ol className="list-decimal list-inside space-y-1 my-2">{children}</ol>
+            },
+            // Paragraphs — add spacing between them
+            p({ children }) {
+              return <p className="mb-2 last:mb-0">{children}</p>
+            },
+            // Headers
+            h1({ children }) {
+              return <h1 className="text-lg font-bold text-white mt-3 mb-1">{children}</h1>
+            },
+            h2({ children }) {
+              return <h2 className="text-base font-bold text-white mt-3 mb-1">{children}</h2>
+            },
+            h3({ children }) {
+              return <h3 className="text-sm font-bold text-white mt-2 mb-1">{children}</h3>
+            },
+          }}
+        >
+          {msg.content}
+        </ReactMarkdown>
+      )}
               </div>
             </div>
           ))}
 
           {/* Streaming text — shows while model is generating */}
           {streamingText && (
-            <div className="flex justify-start">
-              <div className="max-w-2xl px-4 py-3 rounded-2xl rounded-bl-sm text-sm leading-relaxed bg-gray-800 text-gray-100">
-                {streamingText}
-                {/* Blinking cursor while streaming */}
-                <span className="inline-block w-1 h-4 bg-blue-400 ml-1 animate-pulse" />
-              </div>
-            </div>
-          )}
+  <div className="flex justify-start">
+    <div className="max-w-2xl px-4 py-3 rounded-2xl rounded-bl-sm text-sm leading-relaxed bg-gray-800 text-gray-100">
+      <ReactMarkdown
+        components={{
+          code({ node, className, children, ...props }) {
+  const isInline = !className
+  return isInline ? (
+    <code
+      className="bg-gray-700 text-blue-300 px-1 py-0.5 rounded text-xs font-mono"
+      {...props}
+    >
+      {children}
+    </code>
+  ) : (
+    <pre className="bg-gray-900 rounded-lg p-3 overflow-x-auto my-2">
+      <code className="text-green-400 text-xs font-mono" {...props}>
+        {children}
+      </code>
+    </pre>
+  )
+},
+          strong({ children }) {
+            return <strong className="text-white font-semibold">{children}</strong>
+          },
+          ul({ children }) {
+            return <ul className="list-disc list-inside space-y-1 my-2">{children}</ul>
+          },
+          ol({ children }) {
+            return <ol className="list-decimal list-inside space-y-1 my-2">{children}</ol>
+          },
+          p({ children }) {
+            return <p className="mb-2 last:mb-0">{children}</p>
+          },
+        }}
+      >
+        {streamingText}
+      </ReactMarkdown>
+      <span className="inline-block w-1 h-4 bg-blue-400 ml-1 animate-pulse" />
+    </div>
+  </div>
+)}
 
           <div ref={messagesEndRef} />
         </div>
