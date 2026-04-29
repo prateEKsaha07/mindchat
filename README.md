@@ -18,6 +18,7 @@ A full stack AI chatbot built from scratch — FastAPI backend, TinyLlama LLM ru
 ---
 
 ## Project Structure
+```bash
 mindchat/
 ├── backend/
 │   ├── app/
@@ -50,7 +51,8 @@ mindchat/
 │       ├── services/
 │       │   └── api.js           # All API calls in one place
 │       └── App.jsx              # Routing
-└── README.md
+└── README.
+```
 
 ---
 
